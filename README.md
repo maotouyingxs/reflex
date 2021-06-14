@@ -65,27 +65,36 @@
 3.	静态内部方式:结合了懒汉式和饿汉式各自的优点，真正需要对象的时候才会加载，加载类是线程安全的。
 4.	枚举单例: 使用枚举实现单例模式 优点:实现简单、调用效率高，枚举本身就是单例，由jvm从根本上提供保障!避免通过反射和反序列化的漏洞， 缺点没有延迟加载。
 5.	双重检测锁方式 (因为JVM本质重排序的原因，可能会初始化多次，不推荐使用)
-```
-    // 饿汉模式
-    // 类初始化的时候就会创建对象，天生线程安全，调用效率比较高，如果不适用对象的时候，就会浪费内存
-    private static final User01 user01 = new User01();
-    // 1. 将构造函数私有化
-    private User01() {
-    }
+```java
+/**
+ * 饿汉模式
+ */
+public class User02 {
+   // 类初始化的时候就会创建对象，天生线程安全，调用效率比较高，如果不适用对象的时候，就会浪费内存
+   private static final User01 user01 = new User01();
 
-    public static User01 getInstance() {
-        return user01;
-    }
+   // 1. 将构造函数私有化
+   private User01() {
+   }
 
-    //
-    public static void main(String[] args) {
-        User01 u1 = User01.getInstance();
-        User01 u2 = User01.getInstance();
-        System.out.println(u1 == u2);
-    }
+   public static User01 getInstance() {
+      return user01;
+   }
+
+   //
+   public static void main(String[] args) {
+      User01 u1 = User01.getInstance();
+      User01 u2 = User01.getInstance();
+      System.out.println(u1 == u2);
+   }
+}
 ```
 ---
-```
+```java
+/**
+ * 懒汉式
+ */
+public class User02 {
     //懒汉式：类初始化时，不会创建该对象，正真需要时，才会加载（创建），天生线程不安全，需要解决线程安全问题，所以效率比较低。
     private static User02 user02;
 
@@ -106,6 +115,32 @@
         User02 u2 = User02.getInstance();
         System.out.println(u1 == u2);
     }
+}
+```
+```java
+/**
+ * 静态内部类
+ */
+public class User03 {
+    private User03() {
+        System.out.println("初始化...");
+    }
+
+    public static class UserClassInstance {
+        private static final User03 user03 = new User03();
+    }
+
+    public static User03 getInstance() {
+        System.out.println("getInstance");
+        return UserClassInstance.user03;
+    }
+
+    public static void main(String[] args) {
+        User03 u1 = User03.getInstance();
+        User03 u2 = User03.getInstance();
+        System.out.println(u1 == u2);
+    }
+}
 ```
 ```java
 /**
@@ -144,7 +179,7 @@ public class User04 {
 }
 ```
 ---
-### 8. 工程模式
+### 8. 工厂模式
 1. 什么是工厂模式: 实现了创建者和调用者分离，工厂模式分为简单工厂、工厂方法、抽象工厂模式
 2. 工厂模式好处
    工厂模式是我们最常用的实例化对象模式了，是用工厂方法代替new操作的一种模式。
