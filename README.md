@@ -431,3 +431,60 @@ public class Client {
     }
 }
 ```
+--- 
+### 12. 代理模式
+1.  什么是代理模式:
+    通过代理控制对象的访问,可以详细访问某个对象的方法，在这个方法调用处理，或调用后处理。既(AOP微实现)  ,AOP核心技术面向切面编程。
+    ![img.png](docs/imgs/proxypattern.png)
+2. 代理模式应用场景:
+      SpringAOP、事物原理、日志打印、权限控制、远程调用、安全代理 可以隐蔽真实角色
+3. 代理的分类:
+   1. 静态代理(静态定义代理类)
+   2. 动态代理(动态生成代理类)
+   3. Jdk自带动态代理
+   4. Cglib 、javaassist（字节码操作库）
+
+**4. 静态代理**
+   1. 什么是静态代理:
+      由程序员创建或工具生成代理类的源码，再编译代理类。所谓静态也就是在程序运行前就已经存在代理类的字节码文件，代理类和委托类的关系在运行前就确定了。
+```java
+public interface IUserDao {
+    void add();
+}
+```
+```java
+public class IUserDaoImpl implements IUserDao{
+    @Override
+    public void add() {
+        System.out.println("add方法...");
+    }
+}
+```
+```java
+public class UserDaoProxy implements IUserDao {
+    private IUserDao iUserDao;
+
+    public UserDaoProxy(IUserDao iUserDao) {
+        this.iUserDao = iUserDao;
+    }
+
+    @Override
+    public void add() {
+        System.out.println("开启事务...");
+        iUserDao.add();
+        System.out.println("提交事务...");
+    }
+}
+```
+```java
+/**
+ * 静态代理，静态代理是需要生产代理对象的
+ */
+public class Demo01 {
+    public static void main(String[] args) {
+        IUserDao iUserDao = new IUserDaoImpl();
+        UserDaoProxy userDaoProxy = new UserDaoProxy(iUserDao);
+        userDaoProxy.add();
+    }
+}
+```
