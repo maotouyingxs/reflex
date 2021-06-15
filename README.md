@@ -187,3 +187,136 @@ public class User04 {
    将选择实现类、创建对象统一管理和控制。从而将调用者跟我们的实现类解耦。
 3. 工厂模式分类
    1. 简单工厂模式: 简单工厂模式相当于是一个工厂中有各种产品，创建在一个类中，客户无需知道具体产品的名称，只需要知道产品类所对应的参数即可。但是工厂的职责过重，而且当类型过多时不利于系统的扩展维护。
+### 9. 简单工厂模式
+1. 简单工厂模式相当于是一个工厂中有各种产品，创建在一个类中，客户无需知道具体产品的名称，只需要知道产品类所对应的参数即可。但是工厂的职责过重，而且当类型过多时不利于系统的扩展维护。
+2. 单工厂的优点/缺点
+   1. 优点：简单工厂模式能够根据外界给定的信息，决定究竟应该创建哪个具体类的对象。明确区分了各自的职责和权力，有利于整个软件体系结构的优化。
+   2. 缺点：很明显工厂类集中了所有实例的创建逻辑，容易违反GRASPR的高内聚的责任分配原则
+```java
+   public interface Car {
+       void run();
+   }
+```
+```java
+/**
+* 比亚迪汽车
+  */
+  public class BydCar implements Car {
+  @Override
+  public void run() {
+  System.out.println("比亚迪汽车...");
+  }
+  }
+```
+```java
+/**
+ * 吉利汽车
+ */
+public class JiliCar implements Car {
+    @Override
+    public void run() {
+        System.out.println("吉利汽车...");
+    }
+}
+```
+```java
+/**
+ * 汽车厂(4S店)
+ */
+public class CarFactory {
+    public static Car createCar(String name) {
+        if (StringUtils.isEmpty(name)) {
+            return null;
+        }
+        if ("比亚迪".equals(name)) {
+            return new BydCar();
+        }
+        if ("吉利".equals(name)) {
+            return new JiliCar();
+        }
+        return null;
+    }
+}
+```
+```java
+public class Client {
+    public static void main(String[] args) {
+        Car bydCar = CarFactory.createCar("比亚迪");
+        Car jiliCar = CarFactory.createCar("吉利");
+        bydCar.run();
+        jiliCar.run();
+    }
+}
+```
+
+### 10. 工厂方法模式
+1. 什么是工厂方法模式: 工厂方法模式Factory Method，又称多态性工厂模式。在工厂方法模式中，核心的工厂类不再负责所有的产品的创建，
+```java
+   public interface Car {
+       void run();
+   }
+```
+```java
+/**
+* 比亚迪汽车
+  */
+  public class BydCar implements Car {
+  @Override
+  public void run() {
+  System.out.println("比亚迪汽车...");
+  }
+  }
+```
+```java
+/**
+ * 吉利汽车
+ */
+public class JiliCar implements Car {
+    @Override
+    public void run() {
+        System.out.println("吉利汽车...");
+    }
+}
+```
+```java
+/**
+ * 汽车厂(4S店)
+ */
+public interface CarFactory {
+    Car createCar(String name);
+}
+```
+```java
+/**
+ * 比亚迪汽车4S店销售
+ */
+public class BydFactory implements CarFactory {
+    @Override
+    public Car createCar(String name) {
+        return new BydCar();
+    }
+}
+```
+```java
+/**
+ * 吉利汽车4S店销售
+ */
+public class JiLiFactory implements CarFactory {
+    @Override
+    public Car createCar(String name) {
+        return new JiliCar();
+    }
+}
+```
+```java
+public class Client {
+    public static void main(String[] args) {
+        CarFactory carFactory = new BydFactory();
+        Car car = carFactory.createCar("比亚迪");
+        car.run();
+        JiLiFactory jiLiFactory = new JiLiFactory();
+        Car jiLiCar = jiLiFactory.createCar("吉利");
+        jiLiCar.run();
+    }
+}
+```
