@@ -189,6 +189,7 @@ public class User04 {
    1. 简单工厂模式: 简单工厂模式相当于是一个工厂中有各种产品，创建在一个类中，客户无需知道具体产品的名称，只需要知道产品类所对应的参数即可。但是工厂的职责过重，而且当类型过多时不利于系统的扩展维护。
 ### 9. 简单工厂模式
 1. 简单工厂模式相当于是一个工厂中有各种产品，创建在一个类中，客户无需知道具体产品的名称，只需要知道产品类所对应的参数即可。但是工厂的职责过重，而且当类型过多时不利于系统的扩展维护。
+   ![img.png](docs/imgs/simplefactory.png)
 2. 单工厂的优点/缺点
    1. 优点：简单工厂模式能够根据外界给定的信息，决定究竟应该创建哪个具体类的对象。明确区分了各自的职责和权力，有利于整个软件体系结构的优化。
    2. 缺点：很明显工厂类集中了所有实例的创建逻辑，容易违反GRASPR的高内聚的责任分配原则
@@ -251,6 +252,7 @@ public class Client {
 
 ### 10. 工厂方法模式
 1. 什么是工厂方法模式: 工厂方法模式Factory Method，又称多态性工厂模式。在工厂方法模式中，核心的工厂类不再负责所有的产品的创建，
+![img.png](docs/imgs/methodfactory.png)
 ```java
    public interface Car {
        void run();
@@ -317,6 +319,115 @@ public class Client {
         JiLiFactory jiLiFactory = new JiLiFactory();
         Car jiLiCar = jiLiFactory.createCar("吉利");
         jiLiCar.run();
+    }
+}
+```
+### 11. 抽象工厂模式
+1. 什么是抽象工厂模式:
+   抽象工厂简单地说是工厂的工厂，抽象工厂可以创建具体工厂，由具体工厂来产生具体产品。
+   ![img.png](docs/imgs/abstractfactory.png)
+   i[img.png](docs/imgs/abstractfactory2.png)
+
+```java
+/**
+ * 发动机
+ */
+public interface Engine {
+    void run();
+    void start();
+}
+
+class EngineA implements Engine {
+
+    @Override
+    public void run() {
+        System.out.println("发送机转速快...");
+    }
+
+    @Override
+    public void start() {
+
+    }
+}
+
+class EngineB implements Engine {
+    @Override
+    public void run() {
+        System.out.println("发动机转速慢...");
+    }
+
+    @Override
+    public void start() {
+
+    }
+}
+```
+```java
+/**
+ * 座椅
+ */
+public interface Chair {
+    void run();
+}
+
+class ChairA implements Chair {
+    @Override
+    public void run() {
+        System.out.println("自动加热...");
+    }
+}
+class ChairB implements Chair {
+    @Override
+    public void run() {
+        System.out.println("不能加热...");
+    }
+}
+```
+```java
+
+/**
+ * 包装厂
+ */
+public interface CarFactory {
+    /**
+     * 创建发动机
+     *
+     * @return 发动机
+     */
+    Engine createEngine();
+
+    /**
+     * 创建座椅
+     *
+     * @return 座椅
+     */
+    Chair createChair();
+}
+
+```
+```java
+public class JiLiFactory implements CarFactory{
+    @Override
+    public Engine createEngine() {
+        return new EngineA();
+    }
+
+    @Override
+    public Chair createChair() {
+        return new ChairA();
+    }
+}
+
+```
+```java
+public class Client {
+    public static void main(String[] args) {
+        CarFactory jiLiFactory = new JiLiFactory();
+        Engine engineA = jiLiFactory.createEngine();
+        Chair chairA = jiLiFactory.createChair();
+        engineA.run();
+        engineA.start();
+        chairA.run();
     }
 }
 ```
