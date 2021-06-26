@@ -862,3 +862,122 @@ public class ClientTemplate {
 }
 
 ```
+### 3. 适配模式 
+1. 什么是适配器
+在设计模式中，适配器模式（英语：adapter pattern）有时候也称包装样式或者包装(wrapper)。将一个类的接口转接成用户所期待的。一个适配使得因接口不兼容而不能在一起工作的类工作在一起，做法是将类自己的接口包裹在一个已存在的类中。
+
+2. 适配器分类
+适配器分为，类适配器、对象适配、接口适配方式；
+类适配器方式采用继承方式，对象适配方式使用构造函数传递
+
+3. 适配器案例
+我们就拿日本电饭煲的例子进行说明，日本电饭煲电源接口标准是110V电压，而中国标准电压接口是220V，所以要想在中国用日本电饭煲，需要一个电源转换器。
+
+```java
+/**
+ * @author mao
+ * @date 2021-06-26
+ * 中国220V电源
+ */
+public interface Cn220vInterface {
+    /**
+     * 连接电源
+     */
+    void connect();
+}
+```
+```java
+/**
+ * @author mao
+ * @date 2021-06-26
+ */
+public class Cn220vInterfaceImpl implements Cn220vInterface {
+    @Override
+    public void connect() {
+        System.out.println("中国220V电源开始连接...");
+    }
+}
+```
+```java
+/**
+ * @author mao
+ * @date 2021-06-26
+ * 日本110V电源
+ */
+public interface Jp110vInterface {
+    /**
+     * 连接电源
+     */
+    void connect();
+}
+```
+```java
+/**
+ * @author mao
+ * @date 2021-06-26
+ */
+public class Jp110vInterfaceImpl implements Jp110vInterface {
+    @Override
+    public void connect() {
+        System.out.println("日本110V电源开始连接...");
+    }
+}
+```
+```java
+/**
+ * @author mao
+ * @date 2021-06-26
+ * 日本电饭煲
+ */
+public class ElectricCooker {
+    private Jp110vInterface jp110vInterface;
+
+    public ElectricCooker(Jp110vInterface jp110vInterface) {
+        this.jp110vInterface = jp110vInterface;
+    }
+
+    /**
+     * 电饭煲开始工作
+     */
+    public void cook() {
+        jp110vInterface.connect();
+        System.out.println("电饭煲开始工作...");
+    }
+}
+```
+```java
+/**
+ * @author mao
+ * @date 2021-06-26
+ * 适配器 传入中国220V电源
+ */
+public class PowerAdaptor implements Jp110vInterface{
+    private Cn220vInterface cn220vInterface;
+
+    public PowerAdaptor(Cn220vInterface cn220vInterface) {
+        this.cn220vInterface = cn220vInterface;
+    }
+
+    @Override
+    public void connect() {
+        cn220vInterface.connect();
+    }
+}
+```
+```java
+/**
+ * @author mao
+ * @date 2021-06-26
+ */
+public class AdaptorTest {
+    public static void main(String[] args) {
+        // 中国220V电源
+        Cn220vInterfaceImpl cn220vInterface = new Cn220vInterfaceImpl();
+        // 适配器
+        PowerAdaptor powerAdaptor = new PowerAdaptor(cn220vInterface);
+        // 电饭煲
+        ElectricCooker electricCooker = new ElectricCooker(powerAdaptor);
+        electricCooker.cook();
+    }
+}
+```
