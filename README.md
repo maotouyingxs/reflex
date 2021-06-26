@@ -38,6 +38,8 @@
 |setAccessible	|允许访问私有成员
 
 ### 5.设计模式
+常用的：工厂方法模式、抽象工厂模式、单例模式、原型模式、
+适配器模式、装饰器模式、代理模式、外观模式、组合模式、策略模式、模板方法模式、观察者模式
 1. 创建型模式，共五种：工厂方法模式、抽象工厂模式、单例模式、建造者模式、原型模式。
 2. 结构型模式，共七种：适配器模式、装饰器模式、代理模式、外观模式、桥接模式、组合模式、享元模式。
 3. 行为型模式，共十一种：策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、访问者模式、中介者模式、解释器模式。
@@ -580,3 +582,199 @@ public class CglibProxy implements MethodInterceptor {
          JDK动态代理只能对实现了接口的类生成代理，而不能针对类 。
    - CGLIB是针对类实现代理，主要是对指定的类生成一个子类，覆盖其中的方法 。
      因为是继承，所以该类或方法最好不要声明成final ，final可以阻止继承和多态。
+---
+### 1. 建造者模式
+   1. 什么是建造者模式
+![img.png](./docs/imgs/buildMode.png)
+      1. 建造者模式：是将一个复杂的对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。
+      工厂类模式提供的是创建单个类的模式，而建造者模式则是将各种产品集中起来进行管理，用来创建复合对象，所谓复合对象就是指某个类具有不同的属性，其实建造者模式就是前面抽象工厂模式和最后的Test结合起来得到的。
+      建造者模式通常包括下面几个角色：
+         1. Builder：给出一个抽象接口，以规范产品对象的各个组成成分的建造。这个接口规定要实现复杂对象的哪些部分的创建，并不涉及具体的对象部件的创建。
+         2. ConcreteBuilder：实现Builder接口，针对不同的商业逻辑，具体化复杂对象的各部分的创建。 在建造过程完成后，提供产品的实例。
+         3. Director：调用具体建造者来创建复杂对象的各个部分，在指导者中不涉及具体产品的信息，只负责保证对象各部分完整创建或按某种顺序创建。
+         4. Product：要创建的复杂对象。
+      2. 建造者应用场景
+         1. 去肯德基，汉堡、可乐、薯条、炸鸡翅等是不变的，而其组合是经常变化的，生成出所谓的"套餐"。
+         19元每周三 汉堡+可乐+薯条=套餐可能会发生改变。
+         2. JAVA 中的 StringBuilder 数组（单个字符）字整合在一起 字符串
+      3. 使用场景：
+         1. 需要生成的对象具有复杂的内部结构。
+         2. 需要生成的对象内部属性本身相互依赖。
+      **与工厂模式的区别是：建造者模式更加关注与零件装配的顺序。**
+
+      4. 实际案例 :这里以游戏开发中人物的构造过程为例。在游戏中创建一个形象时，需要对每个部位进行创建。简化而言，需要创建头部，身体和四肢。
+头部、体部、四肢
+```java
+/**
+ * @author mao
+ * @date 2021-06-26
+ * description 人物对象
+ */
+public class Person {
+    /**
+     * 头部
+     */
+    private String head;
+    /**
+     * 体部
+     */
+    private String body;
+
+    /**
+     * 尾部
+     */
+    private String foot;
+
+    public String getHead() {
+        return head;
+    }
+
+    public void setHead(String head) {
+        this.head = head;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public String getFoot() {
+        return foot;
+    }
+
+    public void setFoot(String foot) {
+        this.foot = foot;
+    }
+}
+```
+```java
+/**
+ * @author mao
+ * @date 2021-06-26
+ * description 给出一个抽象接口，以规范产品对象的各个组成成分的建造。
+ * 这个接口规定要实现复杂对象的哪些部分的创建，并不涉及具体的对象部件的创建
+ */
+public interface PersonBuilder {
+    /**
+     * 构建头部
+     */
+    void buildHead();
+
+    /**
+     * 构建体部
+     */
+    void buildBody();
+
+    /**
+     * 构建尾部
+     */
+    void buildFoot();
+
+    /**
+     * 组织人物
+     *
+     * @return 人物
+     */
+    Person buildPerson();
+}
+```
+```java
+/**
+ * @author mao
+ * @date 2021-06-26
+ * description 实现Builder接口，创建美国人。 在建造过程完成后，提供产品的实例
+ */
+public class ManBuilder implements PersonBuilder {
+    private Person person;
+
+    public ManBuilder() {
+        this.person = new Person();
+    }
+
+    @Override
+    public void buildHead() {
+        person.setHead("美国人，头部，鼻子尖...");
+    }
+
+    @Override
+    public void buildBody() {
+        person.setBody("美国人，体部，块头大...");
+    }
+
+    @Override
+    public void buildFoot() {
+        person.setFoot("美国人，尾部，腿长...");
+    }
+
+    @Override
+    public Person buildPerson() {
+        return person;
+    }
+}
+```
+```java
+/**
+ * @author mao
+ * @date 2021-06-26
+ * description 实现Builder接口，创建日本人。 在建造过程完成后，提供产品的实例
+ */
+public class JpBuilder implements PersonBuilder {
+    private Person person;
+
+    public JpBuilder() {
+        this.person = new Person();
+    }
+
+    @Override
+    public void buildHead() {
+        person.setHead("日本人，头部，圆脸...");
+    }
+
+    @Override
+    public void buildBody() {
+        person.setBody("日本人，体部，块头小...");
+    }
+
+    @Override
+    public void buildFoot() {
+        person.setFoot("日本人，尾部，腿短...");
+    }
+
+    @Override
+    public Person buildPerson() {
+        return person;
+    }
+}
+```
+```java
+/**
+ * @author mao
+ * @date 2021-06-26
+ * description 调用具体建造者来创建复杂对象的各个部分，在指导者中不涉及具体产品的信息，只负责保证对象各部分完整创建或按某种顺序创建
+ */
+public class PersonDirector {
+    public Person constructPerson(PersonBuilder personBuilder) {
+        personBuilder.buildHead();
+        personBuilder.buildBody();
+        personBuilder.buildFoot();
+        return personBuilder.buildPerson();
+    }
+
+    public static void main(String[] args) {
+        PersonDirector personDirector = new PersonDirector();
+        // 构建美国人
+        Person person = personDirector.constructPerson(new ManBuilder());
+        System.out.println(person.getHead());
+        System.out.println(person.getBody());
+        System.out.println(person.getFoot());
+        // 构建日本人
+        Person person1 = personDirector.constructPerson(new JpBuilder());
+        System.out.println(person1.getHead());
+        System.out.println(person1.getBody());
+        System.out.println(person1.getFoot());
+    }
+}
+```
