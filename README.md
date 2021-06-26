@@ -778,3 +778,87 @@ public class PersonDirector {
     }
 }
 ```
+## 2. 模板方法
+1. 什么是模板方法
+   1. 模板方法模式：定义一个操作中的算法骨架，而将一些步骤延迟到子类中。模板方法使得子类可以不改变一个算法的结构即可重定义该算法的
+重复代码全部在父类里面，不同业务的，使用抽象方法，抽取给子类进行实现。抽取过程---抽象方法。
+某些特定步骤。
+   2. 核心：处理某个流程的代码已经都具备，但是其中某个节点的代码暂时不能确定。因此，我们采用工厂方法模式，将这个节点的代码实现转移给
+子类完成。即：处理步骤在父类中定义好，具体的实现延迟到子类中定义。
+说白了，就是将一些相同操作的代码，封装成一个算法的骨架。核心的部分留在子类中操作，在父类中只把那些骨架做好。
+   3. 例如：
+      1. 去银行办业务，银行给我们提供了一个模板就是：先取号，排对，办理业务（核心部分我们子类完成），给客服人员评分，完毕。
+这里办理业务是属于子类来完成的，其他的取号，排队，评分则是一个模板。 
+      2. 去餐厅吃饭，餐厅给提供的一套模板就是：先点餐，等待，吃饭（核心部分我们子类完成），买单
+这里吃饭是属于子类来完成的，其他的点餐，买单则是餐厅提供给我们客户的一个模板。
+![img.png](./docs/imgs/templ.png)
+```java
+/**
+ * @author mao
+ * @date 2021-06-26
+ */
+public abstract class SendMessage {
+
+    public void headLog() {
+        System.out.println("调用运营商开始记录日志...");
+    }
+
+    public void footLog() {
+        System.out.println("调用运营商结束记录日志...");
+    }
+
+    /**
+     * 调用不同运营商发送短信
+     */
+    public abstract void httpRequest();
+
+    /**
+     * 发送短信
+     */
+    public void sendMessage() {
+        headLog();
+        httpRequest();
+        footLog();
+    }
+}
+```
+```java
+/**
+ * @author mao
+ * @date 2021-06-26
+ */
+public class YiDong extends SendMessage{
+    @Override
+    public void httpRequest() {
+        System.out.println("http://yidong...");
+    }
+}
+```
+```java
+/**
+ * @author mao
+ * @date 2021-06-26
+ */
+public class LianTong extends SendMessage{
+
+    @Override
+    public void httpRequest() {
+        System.out.println("http://liantong...");
+    }
+}
+```
+```java
+/**
+ * @author mao
+ * @date 2021-06-26
+ */
+public class ClientTemplate {
+    public static void main(String[] args) {
+        YiDong yiDong = new YiDong();
+        yiDong.sendMessage();
+        LianTong lianTong = new LianTong();
+        lianTong.sendMessage();
+    }
+}
+
+```
