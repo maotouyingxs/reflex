@@ -580,3 +580,5 @@ public class CglibProxy implements MethodInterceptor {
          JDK动态代理只能对实现了接口的类生成代理，而不能针对类 。
    - CGLIB是针对类实现代理，主要是对指定的类生成一个子类，覆盖其中的方法 。
      因为是继承，所以该类或方法最好不要声明成final ，final可以阻止继承和多态。
+6. 枚举
+枚举-一般定义常量，天生具备 JVM 保障单例，防止反射攻击
