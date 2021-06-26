@@ -1,4 +1,4 @@
-### 1. 什么是Java反射
+### 1. [什么是Java反射](docs/reflex.md)
 1. 就是正在运行，动态获取这个类的所有信息。
 ### 2. 反射机制的作用
 1. 反编译：.class-->.java
@@ -42,7 +42,7 @@
 2. 结构型模式，共七种：适配器模式、装饰器模式、代理模式、外观模式、桥接模式、组合模式、享元模式。
 3. 行为型模式，共十一种：策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、访问者模式、中介者模式、解释器模式。
 
-### 6. 单例设计模式
+### 6. [单例设计模式](docs/singletonMode.md)
 1. 什么是单例：
    保证一个类只有一个实例，并且提供一个访问该全局访问点
 2. 单例优缺点
@@ -326,7 +326,7 @@ public class Client {
 1. 什么是抽象工厂模式:
    抽象工厂简单地说是工厂的工厂，抽象工厂可以创建具体工厂，由具体工厂来产生具体产品。
    ![img.png](docs/imgs/abstractfactory.png)
-   i[img.png](docs/imgs/abstractfactory2.png)
+   ![img.png](docs/imgs/abstractfactory2.png)
 
 ```java
 /**
@@ -432,7 +432,7 @@ public class Client {
 }
 ```
 --- 
-### 12. 代理模式
+### 12. [代理模式](docs/proxy.md)
 1.  什么是代理模式:
     通过代理控制对象的访问,可以详细访问某个对象的方法，在这个方法调用处理，或调用后处理。既(AOP微实现)  ,AOP核心技术面向切面编程。
     ![img.png](docs/imgs/proxypattern.png)
@@ -580,5 +580,3 @@ public class CglibProxy implements MethodInterceptor {
          JDK动态代理只能对实现了接口的类生成代理，而不能针对类 。
    - CGLIB是针对类实现代理，主要是对指定的类生成一个子类，覆盖其中的方法 。
      因为是继承，所以该类或方法最好不要声明成final ，final可以阻止继承和多态。
-6. 枚举
-枚举-一般定义常量，天生具备 JVM 保障单例，防止反射攻击
