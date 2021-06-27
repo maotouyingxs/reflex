@@ -43,6 +43,23 @@
 1. 创建型模式，共五种：工厂方法模式、抽象工厂模式、单例模式、建造者模式、原型模式。
 2. 结构型模式，共七种：适配器模式、装饰器模式、代理模式、外观模式、桥接模式、组合模式、享元模式。
 3. 行为型模式，共十一种：策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、访问者模式、中介者模式、解释器模式。
+### 6. 设计模式的六大原则
+1. 开闭原则（Open Close Principle）
+开闭原则就是说对扩展开放，对修改关闭。在程序需要进行拓展的时候，不能去修改原有的代码，实现一个热插拔的效果。所以一句话概括就是：为了使程序的扩展性好，易于维护和升级。想要达到这样的效果，我们需要使用接口和抽象类，后面的具体设计中我们会提到这点。
+
+2. 里氏代换原则（Liskov Substitution Principle）
+里氏代换原则(Liskov Substitution Principle LSP)面向对象设计的基本原则之一。 里氏代换原则中说，任何基类可以出现的地方，子类一定可以出现。 LSP是继承复用的基石，只有当衍生类可以替换掉基类，软件单位的功能不受到影响时，基类才能真正被复用，而衍生类也能够在基类的基础上增加新的行为。里氏代换原则是对“开-闭”原则的补充。实现“开-闭”原则的关键步骤就是抽象化。而基类与子类的继承关系就是抽象化的具体实现，所以里氏代换原则是对实现抽象化的具体步骤的规范。—— From Baidu 百科
+
+3. 依赖倒转原则（Dependence Inversion Principle）
+这个是开闭原则的基础，具体内容：真对接口编程，依赖于抽象而不依赖于具体。
+接口隔离原则（Interface Segregation Principle）
+这个原则的意思是：使用多个隔离的接口，比使用单个接口要好。还是一个降低类之间的耦合度的意思，从这儿我们看出，其实设计模式就是一个软件的设计思想，从大型软件架构出发，为了升级和维护方便。所以上文中多次出现：降低依赖，降低耦合。
+
+4. 迪米特法则（最少知道原则）（Demeter Principle）
+为什么叫最少知道原则，就是说：一个实体应当尽量少的与其他实体之间发生相互作用，使得系统功能模块相对独立。
+
+5. 合成复用原则（Composite Reuse Principle）
+原则是尽量使用合成/聚合的方式，而不是使用继承。
 
 ### 6. [单例设计模式](docs/singletonMode.md)
 1. 什么是单例：
@@ -986,3 +1003,99 @@ public class AdaptorTest {
 外观模式（Facade Pattern）门面模式，隐藏系统的复杂性，并向客户端提供了一个客户端可以访问系统的接口。这种类型的设计模式属于结构型模式，它向现有的系统添加一个接口，来隐藏系统的复杂性。
 这种模式涉及到一个单一的类，该类提供了客户端请求的简化方法和对现有系统类方法的委托调用。
 ![img.png](./docs/imgs/exterior.png)
+
+### 5. 原型模式
+1. 什么是原型模式
+克隆
+原型模式是一个创建型的模式。原型二字表明了改模式应该有一个样板实例，用户从这个样板对象中复制一个内部属性一致的对象，这个过程也就是我们称的“克隆”。被复制的实例就是我们所称的“原型”，这个原型是可定制的。原型模式多用于创建复杂的或者构造耗时的实例，因为这种情况下，复制一个已经存在的实例可使程序运行更高效。
+原型模式应用场景
+
+   1. 类初始化需要消化非常多的资源，这个资源包括数据、硬件资源等，通过原型拷贝避免这些消耗。
+   2. 通过new产生的一个对象需要非常繁琐的数据准备或者权限，这时可以使用原型模式。
+   3. 一个对象需要提供给其他对象访问，而且各个调用者可能都需要修改其值时，可以考虑使用原型模式拷贝多个对象供调用者使用，即保护性拷贝。
+   4. Spring框架中的多例就是使用原型。 
+2. 原型模式UML类图（通用）
+   2. 原型模式主要用于对象的复制，它的核心是就是类图中的原型类Prototype。Prototype类需要具备以下两个条件：
+      1. 实现Cloneable接口。在java语言有一个Cloneable接口，它的作用只有一个，就是在运行时通知虚拟机可以安全地在实现了此接口的类上使用clone方法。在java虚拟机中，只有实现了这个接口的类才可以被拷贝，否则在运行时会抛出CloneNotSupportedException异常。
+      2. 重写Object类中的clone方法。Java中，所有类的父类都是Object类，Object类中有一个clone方法，作用是返回对象的一个拷贝，但是其作用域protected类型的，一般的类无法调用，因此Prototype类需要将clone方法的作用域修改为public类型。
+3. 原型模式分为浅复制和深复制
+   1. 浅复制 —-只是拷贝了基本类型的数据，而引用类型数据，复制后也是会发生引用，我们把这种拷贝叫做“（浅复制）浅拷贝”，换句话说，浅复制仅仅是指向被复制的内存地址，如果原地址中对象被改变了，那么浅复制出来的对象也会相应改变。
+   2. 深复制 —-在计算机中开辟了一块新的内存地址用于存放复制的对象。
+
+```java
+/**
+ * @author mao
+ * @date 2021-06-27
+ */
+public class Book implements Cloneable{
+    /**
+     * 标题
+     */
+    private String title;
+    /**
+     * 图片列表
+     */
+    private ArrayList<String> image = new ArrayList<>();
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        Book book = (Book) super.clone();
+        // 深复制
+        book.setImage((ArrayList<String>) image.clone());
+        return book;
+    }
+
+    public void addImage(String img) {
+        image.add(img);
+    }
+
+    /**
+     * 打印内容
+     */
+    public void showBook() {
+        System.out.println("-------start--------");
+        System.out.println("title:" + this.title);
+        for (String img : image) {
+            System.out.println("image name:" + img);
+        }
+        System.out.println("-------end--------");
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public ArrayList<String> getImage() {
+        return image;
+    }
+
+    public void setImage(ArrayList<String> image) {
+        this.image = image;
+    }
+}
+```
+```java
+/**
+ * @author mao
+ * @date 2021-06-27
+ */
+public class BookTest {
+    public static void main(String[] args) throws CloneNotSupportedException {
+        Book book1 = new Book();
+        book1.setTitle("图书1");
+        book1.addImage("图片1");
+        book1.showBook();
+
+        Book book2 = (Book) book1.clone();
+        book2.setTitle("图书2");
+        book2.addImage("图片2");
+        book2.showBook();
+
+        book1.showBook();
+    }
+}
+```
