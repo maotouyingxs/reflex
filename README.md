@@ -1099,3 +1099,83 @@ public class BookTest {
     }
 }
 ```
+
+### 6. 策略模式
+1. 什么是策略模式
+定义了一系列的算法，并将每一个算法封装起来，而且使它们还可以相互替换。策略模式让算法独立于使用它的客户而独立变化。
+2. 策略模式由三种角色组成
+3. 策略模式应用场景：
+策略模式的用意是针对一组算法或逻辑，将每一个算法或逻辑封装到具有共同接口的独立的类中，从而使得它们之间可以相互替换。策略模式使得算法或逻辑可以在不影响到客户端的情况下发生变化。说到策略模式就不得不提及OCP(Open Closed Principle) 开闭原则，即对扩展开放，对修改关闭。策略模式的出现很好地诠释了开闭原则，有效地减少了分支语句。
+```java
+/**
+ * @author by maotouying
+ * @Classname Strategy001
+ * @Description 策略模式  会员分为3种等级  铂金会员 黄金会员 普通会员 获取价格都不一样
+ * @Date 2021/7/8 21:07
+ */
+public class Strategy001 {
+    public static void main(String[] args) {
+
+        Context context;
+        context = new Context(new StrategyA());
+        context.algorithmInterface();
+        context = new Context(new StrategyB());
+        context.algorithmInterface();
+        context = new Context(new StrategyC());
+        context.algorithmInterface();
+    }
+}
+```
+```java
+/**
+ * @author by maotouying
+ * @Classname Strategy
+ * @Description 策略模式 定义抽象方法 所有支持公共接口
+ * @Date 2021/7/8 21:53
+ */
+public abstract class Strategy {
+    /**
+     * 算法方法
+     */
+    abstract void algorithmInterface();
+}
+
+class StrategyA extends Strategy {
+
+    @Override
+    void algorithmInterface() {
+        System.out.println("普通会员算法A");
+    }
+}
+
+class StrategyB extends Strategy {
+
+    @Override
+    void algorithmInterface() {
+        System.out.println("黄金会员算法B");
+    }
+}
+
+class StrategyC extends Strategy {
+
+    @Override
+    void algorithmInterface() {
+        System.out.println("铂金会员算法C");
+    }
+}
+
+/**
+ * 使用上下文维护算法策略
+ */
+class Context {
+    Strategy strategy;
+
+    public Context(Strategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public void algorithmInterface(){
+        strategy.algorithmInterface();
+    }
+}
+```
