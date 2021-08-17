@@ -3,7 +3,33 @@
 ### 2. 反射机制的作用
 1. 反编译：.class-->.java
 2. 通过反射机制访问java对象的属性，方法，构造方法等；
+3. JDBC加载驱动连接 class.forname
+   Class.forName("com.mysql.jdbc.Driver"); // 动态加载mysql驱动
+   4.Spring容器框架IOC实例化对象
+   <bean id="mayikt" class="com.mayikt.UserEntity" />
+
+5. 自定义注解生效（反射+Aop）
+6. 第三方核心的框架 mybatis orm 
+### 4. 反射技术的使用
+   1. Class类 代表类的实体，在运行的Java应用程序中表示类和接口
+   2. Field类 代表类的成员变量（成员变量也称为类的属性）
+   3. Method类 代表类的方法
+   4. Constructor类 代表类的构造方法
+   1. getField、getMethod和getCostructor方法可以获得指定名字的域、方法和构造器。
+   2. getFields、getMethods和getCostructors方法可以获得类提供的public域、方法和构造器数组，其中包括超类的共有成员。
+   3. getDeclatedFields、getDeclatedMethods和getDeclaredConstructors方法可以获得类中声明的全部域、方法和构造器，其中包括私有和受保护的成员，但不包括超类的成员。
 ### 3.反射机制获取类有三种方法
+```java
+// 方式一
+Class<UserEntity> userEntityClass1 = UserEntity.class;
+UserEntity userEntity1 = userEntityClass1.newInstance();
+// 方式二
+Class<?> userEntityClass2 = Class.forName("com.mao.entity.UserEntity");
+UserEntity userEntity2 = (UserEntity) userEntityClass2.newInstance();
+// 方式三
+UserEntity userEntity = new UserEntity();
+Class userEntityClass3 = userEntity.getClass();
+```
 1. Class.forName("类的完整路径")
    ```
         // 1.实例化对象 -- 无参构造函数
