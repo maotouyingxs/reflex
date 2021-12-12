@@ -5,6 +5,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+/**
+ * @author maotouying
+ */
 public class UserEntity {
     private String userName;
 
@@ -18,6 +21,17 @@ public class UserEntity {
         this.userName = userName;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void getMayiktName() {
+        System.out.println("mayikt...");
+    }
     /**
      * 思考：在构造函数中，如果发生异常，对象会创建成功吗？ -- 不会
      * @param args

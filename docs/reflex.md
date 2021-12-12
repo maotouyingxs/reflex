@@ -45,3 +45,41 @@
 |getParameterTypes()|	获取传入参数
 |getDeclaredFields()	|获取该类的所有字段
 |setAccessible	|允许访问私有成员
+
+### 5. 注解
+1. 什么是注解：
+   注解用来给类声明附加额外信息，可以标注在类、字段、方法等上面，编译器、JVM以及开
+2. 常用注解
+```
+@Override     只能标注在子类覆盖父类的方法上面，有提示的作用
+@Deprecated    标注在过时的方法或类上面，有提示的作用
+@SuppressWarnings("unchecked")   标注在编译器认为有问题的类、方法等上面，用来取消编译器的警告提示，警告类型有serial、unchecked、unused、all
+
+@Target(ElementType.METHOD) // 指定新注解可以标注在方法上
+@Retention(RetentionPolicy.RUNTIME) // 指定新注解保留到程序运行时期
+@Inherited // 指定新注解标注在父类上时可被子类继承 
+public @interface MayiktName {
+    public String name();
+}
+自定义注解 运行 ：反射+aop
+```
+3. 元注解：
+   元注解用来在声明新注解时指定新注解的一些特性
+```java
+@Target 指定新注解标注的位置，比如类、字段、方法等，取值有ElementType.Method等
+@Retention 指定新注解的信息保留到什么时候，取值有RetentionPolicy.RUNTIME等
+@Inherited  指定新注解标注在父类上时可被子类继承
+```   
+4. 注的 Target
+```java
+TYPE：类、接口（包括注解类型）和枚举的声明
+FIELD：字段声明（包括枚举常量）
+METHOD：方法声明
+PARAMETER：参数声明
+CONSTRUCTOR：构造函数声明
+LOCAL_VARIABLE：本地变量声明
+ANNOTATION_TYPE：注解类型声明
+PACKAGE：包声明
+TYPE_PARAMETER：类型参数声明，JavaSE8引进，可以应用于类的泛型声明之处
+TYPE_USE：JavaSE8引进，此类型包括类型声明和类型参数声明
+```
